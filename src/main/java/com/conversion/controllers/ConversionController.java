@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author - Sathish Raghu
  */
 @RestController
+@RequestMapping(value = "/romannumeral")
 public class ConversionController {
 
     Logger LOGGER = LoggerFactory.getLogger(ConversionController.class);
@@ -32,7 +33,7 @@ public class ConversionController {
      * @return ConversionResponse
      * @throws ConversionException
      */
-    @RequestMapping(value = "/romannumeral", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ConversionResponse convertIntegerToRomanNumeral(@RequestParam(value = "query", required = false) String input) throws ConversionException {
 
         try {
