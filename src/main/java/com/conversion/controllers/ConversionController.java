@@ -20,11 +20,14 @@ public class ConversionController {
     @Autowired
     ConversionService conversionService;
 
+    @Autowired
+    ConversionValidator conversionValidator;
+
     @RequestMapping(value = "/romannumeral", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ConversionResponse getRomanNumeral(@RequestParam(value = "query", required = false) String input) throws ConversionException {
+    public ConversionResponse convertIntegerToRomanNumeral(@RequestParam(value = "query", required = false) String input) throws ConversionException {
 
         try {
-            int number = ConversionValidator.parseInt(input);
+            int number = conversionValidator.parseInt(input);
             String result = conversionService.integerToRomanNumeral(number);
             ConversionResponse response = new ConversionResponse(result);
             LOGGER.info("Roman Conversion is Success");

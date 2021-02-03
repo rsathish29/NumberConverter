@@ -6,7 +6,7 @@ public enum ErrorCodeEnum {
 
     INPUT_EMPTY(100, "Input cannot be empty", HttpStatus.BAD_REQUEST),
     INVALID_INPUT(101, "Invalid Input data, expected input is Integer. Range 1-3999", HttpStatus.BAD_REQUEST),
-    GENERAL_ERROR(102, "Something went wrong. Please try later", HttpStatus.ACCEPTED);
+    GENERAL_ERROR(102, "Something went wrong. Please try later", HttpStatus.INTERNAL_SERVER_ERROR);
     public final int errorCode;
     public final String description;
     public final HttpStatus httpStatus;
