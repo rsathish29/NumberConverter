@@ -1,5 +1,11 @@
 package com.conversion.model;
 
+/**
+ * This is a model object that stores the result and error details.
+ * Only either of them will be populated at any given time
+ *
+ * @author  Sathish Raghu
+ */
 public class ConversionResponse {
 
     private String result;

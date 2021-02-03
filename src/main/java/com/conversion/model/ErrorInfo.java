@@ -1,5 +1,9 @@
 package com.conversion.model;
-
+/**
+ * This is a model object that stores error related information
+ *
+ * @author  Sathish Raghu
+ */
 public class ErrorInfo {
 
     private int code;

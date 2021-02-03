@@ -18,11 +18,25 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.Iterator;
 
+/**
+ *
+ * This controller advice is used to
+ *      - capture all the exceptions in one place
+ *      - construct and send unified error response
+ *
+ * @author Sathish Raghu
+ */
 @ControllerAdvice(assignableTypes = {ConversionController.class})
 public class ConversionControllerAdvice extends ResponseEntityExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConversionController.class);
 
+    /**
+     * This method gets triggered automatically when exception of type ConversionException is thrown
+     * @param exception
+     * @param request
+     * @return
+     */
     @ExceptionHandler(ConversionException.class)
     public final ResponseEntity<ConversionResponse> handleInvalidRoman(Exception exception, WebRequest request) {
         ServletWebRequest req = (ServletWebRequest) request;
@@ -33,6 +47,12 @@ public class ConversionControllerAdvice extends ResponseEntityExceptionHandler {
     }
 
 
+    /**
+     * This method gets triggered automatically when exception of type other than ConversionException is thrown
+     * @param exception
+     * @param request
+     * @return
+     */
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ConversionResponse> handleAll(Exception exception, WebRequest request) {
         ServletWebRequest req = (ServletWebRequest) request;
@@ -41,6 +61,11 @@ public class ConversionControllerAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ConversionResponse(apiError), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * This is a helper method to read the query parameter from the input request
+     * @param request
+     * @return
+     */
     private String getParam(WebRequest request){
 
         Iterator<String> iterator = request.getParameterNames();

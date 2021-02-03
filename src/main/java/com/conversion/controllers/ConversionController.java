@@ -7,11 +7,17 @@ import com.conversion.service.ConversionService;
 import com.conversion.validators.ConversionValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * ConversionController - Exposes rest API endpoints for converting integer to romannumerals
+ * @author - Sathish Raghu
+ */
 @RestController
 public class ConversionController {
 
@@ -20,15 +26,20 @@ public class ConversionController {
     @Autowired
     ConversionService conversionService;
 
+    /**
+     * This method exposes the endpoint using the URI - /romannumeral
+     * @param input
+     * @return ConversionResponse
+     * @throws ConversionException
+     */
     @RequestMapping(value = "/romannumeral", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ConversionResponse convertIntegerToRomanNumeral(@RequestParam(value = "query", required = false) String input) throws ConversionException {
 
         try {
             int number = ConversionValidator.parseInt(input);
             String result = conversionService.integerToRomanNumeral(number);
-            ConversionResponse response = new ConversionResponse(result);
-            LOGGER.info("Roman Conversion is Success");
-            return response;
+            LOGGER.info("Conversion successful : Input - {}, Output - {}", number, result);
+            return new ConversionResponse(result);
 
         }catch (ConversionException e) {
             throw e;

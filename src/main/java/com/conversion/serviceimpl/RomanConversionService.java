@@ -6,6 +6,10 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This is the implementation class for ConversionService that has the concrete logic to do the conversion
+ * @author  Sathish Raghu
+ */
 @Service
 public class RomanConversionService implements ConversionService {
 
@@ -16,6 +20,15 @@ public class RomanConversionService implements ConversionService {
         populateRomanNumerals();
     }
 
+    /**
+     * This method computes the romanNumeral for the given input based on the following logic
+     *      - Reduces the input number by dividing by 1000, 500, 100, 50, 10, 5 & 1 in specific order
+     *      - In case of special numbers like [4,9,40,90,400,900], we directly look it up in the hashMap
+     *      - In all other cases, we compute the romanNumeral using the helperMethod
+     *      - This logic is repeated until the input becomes zero and the string buffer gets popuplated.
+     * @param n - Input integer
+     * @return - Roman Numeral that is equivalent to the given input number
+     */
     @Override
     public String integerToRomanNumeral(Integer n) {
 
@@ -49,16 +62,29 @@ public class RomanConversionService implements ConversionService {
         return result.toString();
     }
 
+    /**
+     *
+     * This method computes the romanNumeral for the given number and its symbol value
+     *
+     * Example : number = 32,symbolValue = 10, XXX gets appended to buffer and return 2 since 32%10 = 2
+     *
+     * @param number - Will only get one of the following values [1,2,3,6,7,8]
+     * @param symbolValue - Will only get one of the following values [1,5,10,50,100,500,1000]
+     * @param sb - Stringbuffer in which the computed romanNumeral gets appended to
+     * @return - Remainder of the number/symbolValue
+     */
+    private int getRomanNumeral(int number , int symbolValue, StringBuffer sb){
 
-    private int getRomanNumeral(int a , int b, StringBuffer sb){
-
-        String c = romanNumerals.get(b);
-        for(int i=0;i<a/b;i++){
+        String c = romanNumerals.get(symbolValue);
+        for(int i=0;i<number/symbolValue;i++){
             sb.append(c);
         }
-        return a%b;
+        return number%symbolValue;
     }
 
+    /**
+     * Helper method to populate the default numbers and its romanNumerals
+     */
     private static void populateRomanNumerals(){
         romanNumerals.put(1, "I");
         romanNumerals.put(5, "V");

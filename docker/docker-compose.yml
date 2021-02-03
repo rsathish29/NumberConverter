@@ -18,6 +18,7 @@ services:
       - "9200:9200"
       - "9300:9300"
     healthcheck:
+      # Health check to validate if the elastic search is running
       test: "wget -q -O - http://$ELASTIC_USER:$ELASTIC_PASSWORD@localhost:9200/_cat/health"
       interval: 1s
       timeout: 30s
