@@ -10,7 +10,7 @@ public class RomanConversionServiceTest {
     ConversionService conversionService = new RomanConversionService();
 
     @Test
-    public void testInitializeRomanNumerals(){
+    public void testIntegerToRomanNumeral(){
         Assertions.assertEquals("X", conversionService.integerToRomanNumeral(10));
         Assertions.assertEquals("CVIII", conversionService.integerToRomanNumeral(108));
         Assertions.assertEquals("MLXXX", conversionService.integerToRomanNumeral(1080));

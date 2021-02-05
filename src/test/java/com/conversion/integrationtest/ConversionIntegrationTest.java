@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ConversionControlIntegrationTest {
+public class ConversionIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
