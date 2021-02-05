@@ -5,6 +5,7 @@
 This application is used to convert integer into Roman Numerals. Technologies used in this project are
 
 * **Java**
+* **Spring** 
 * **SpringBoot** 
 * **Junit**
 * **Powermock**
@@ -25,11 +26,20 @@ This application is used to convert integer into Roman Numerals. Technologies us
 
 **Logs Flow**
 
-
+1. Application logs are sent to the logstash pipeline via TCP Connection
+2. These logs are then sent to ElasticSearch with the configured index - logstash*
+3. Kibana is used to visualize the logs by connecting to elasticsearch
+4. All these 3 components are created using docker compose.
 ![img_2.png](Logs_Flow.png)
 
 
 **Metrics Flow**
+
+1. Elastic APM Agent is installed along with the spring boot application
+2. APM Server is also installed to capture the metrics from the apm agents
+3. APM Server then connects to elastic search to store all the metrics.
+4. Kibana is again used to visualize all the metrics.
+5. The APM Server and the springboot applications are created using docker compose.
 ![img_1.png](Metrics_Flow.png)
 
 ## Build & Installation Instructions
@@ -58,6 +68,13 @@ docker-compose -f docker-compose.yml up  -d
 6. Verify if the containers for the ELK Stack is running. 3 Containers[Elastic Search, Logstash, Kibana] should be running.
 ````
 docker-compose -f docker-compose.yml ps
+
+                Name                              Command                  State                                Ports                          
+-----------------------------------------------------------------------------------------------------------------------------------------------
+spring_boot_elk_demo_elasticsearch_1   /usr/local/bin/docker-entr ...   Up (healthy)   0.0.0.0:9200->9200/tcp, 0.0.0.0:9300->9300/tcp          
+spring_boot_elk_demo_kibana_1          /usr/local/bin/kibana-docker     Up             0.0.0.0:5601->5601/tcp                                  
+spring_boot_elk_demo_logstash_1        /usr/local/bin/docker-entr ...   Up             0.0.0.0:5000->5000/tcp, 5044/tcp, 0.0.0.0:9600->9600/tcp
+
 ````
 7. Repeat step#6 until the elasticsearch container is healthy(since it takes time to bootup ~1minute)
 
@@ -69,17 +86,29 @@ docker-compose -f docker-compose-springboot.yml up  -d
 9. Verify if the containers are running for the springboot application & apm server.
 ````
 docker-compose -f docker-compose-springboot.yml ps
+
+                Name                              Command               State           Ports         
+------------------------------------------------------------------------------------------------------
+spring_boot_elk_demo_apm_1             /usr/local/bin/docker-entr ...   Up      0.0.0.0:8200->8200/tcp
+spring_boot_elk_demo_springbootapp_1   /bin/sh -c java -javaagent ...   Up      0.0.0.0:8080->8080/tcp
+
 ````
 10. Verify the health of the spring boot application using the browser(Credentials required)
 ````
 http://localhost:8080/actuator/health
+
+{"status":"UP"}
 ````
 11. Spring security is enabled for the application [userId:welcome, password:Hello@123]
 
 
-12.Verify if Kibana endpoint is accessible for Logging, Metrics & Monitoring
+12. Verify if Kibana endpoint is accessible.
 ````
 http://localhost:5601
+````
+13. Verify if Swagger is up and running
+````
+http://localhost:8080/swagger-ui.html
 ````
 
 ## Testing Instructions
@@ -128,16 +157,56 @@ Run ->  ConversionIntegrationTest
 
 ```
 
+**Additional Springboot Actuator Metrics Monitoring Endpoints**
+````
+http://localhost:8080/actuator
+http://localhost:8080/actuator/health
+http://localhost:8080/actuator/loggers
+http://localhost:8080/actuator/heapdump
+http://localhost:8080/actuator/threaddump
+http://localhost:8080/actuator/prometheus
+http://localhost:8080/actuator/metrics
+http://localhost:8080/actuator/metrics/{requiredMetricName}
+````
+
 ## DevOps - Metrics, Monitoring & Logging
 
+**Steps to Check the application logs**
+
+1. In order to view the application logs, index pattern has to be created.
 
 
-## ShutDown Containers Instructions
+2. Once the kibana home page opens, click the "Connect to your Elasticsearch index" link. Refer this link for additional info`[https://www.elastic.co/guide/en/kibana/current/index-patterns.html]`
+````
+Step1 : Key in the index pattern as logstash* [make sure the asterisk is added to the end]and click Next Step
+Step 2: Select any option in the dropdown and create index pattern
+````
+   
+3. Select Discover option
+
+
+4. By default, the apm-* index pattern will be selected. Please change it to logstash* pattern.
+
+
+5. After making this change, the application logs should be displayed on this page.
+
+
+**Steps to Check Metrics of application**
+````
+Select APM -> select conversion-service. Application metrics would be displayed.
+````
+
+**Steps to Monitor the application**
+````
+Select Monitoring -> Turn On Monitoring
+````
+
+## ShutDown Instructions
 
 **Stop & Delete the containers**
 
 ````
-docker-compose -f docker-compose-elk.yml down
+docker-compose -f docker-compose.yml down
 docker-compose -f docker-compose-springboot.yml down
 docker system prune
 ````
@@ -145,9 +214,18 @@ docker system prune
 **verify containers are stopped and deleted**
 
 ```
-docker-compose -f docker-compose-elk.yml ps
+docker-compose -f docker-compose.yml ps
 docker-compose -f docker-compose-springboot.yml ps
 ```
+## Open Source Tools Used
+
+* **Spring**
+* **SpringBoot**
+* **Swagger**
+* **Docker**
+* **Elastic Search**
+* **LogStash**
+* **Kibana**
 
 ## References
 
