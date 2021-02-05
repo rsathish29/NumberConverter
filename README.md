@@ -173,31 +173,36 @@ http://localhost:8080/actuator/metrics/{requiredMetricName}
 
 **Steps to Check the application logs**
 
-1. In order to view the application logs, index pattern has to be created.
+1. Open `http://localhost:5601` in browser
 
 
-2. Once the kibana home page opens, click the "Connect to your Elasticsearch index" link. Refer this link for additional info`[https://www.elastic.co/guide/en/kibana/current/index-patterns.html]`
+2. In order to view the application logs, index pattern has to be created.
+
+
+3. Once the kibana home page opens, click the "Connect to your Elasticsearch index" link. Refer this link for additional info`[https://www.elastic.co/guide/en/kibana/current/index-patterns.html]`
 ````
 Step1 : Key in the index pattern as logstash* [make sure the asterisk is added to the end]and click Next Step
 Step 2: Select any option in the dropdown and create index pattern
 ````
    
-3. Select Discover option
+4. Select Discover option
 
 
-4. By default, the apm-* index pattern will be selected. Please change it to logstash* pattern.
+5. By default, the apm-* index pattern will be selected. Please change it to logstash* pattern.
 
 
-5. After making this change, the application logs should be displayed on this page.
+6. After making this change, the application logs should be displayed on this page.
 
 
 **Steps to Check Metrics of application**
 ````
+Open http://localhost:5601 in browser
 Select APM -> select conversion-service. Application metrics would be displayed.
 ````
 
 **Steps to Monitor the application**
 ````
+Open http://localhost:5601 in browser
 Select Monitoring -> Turn On Monitoring
 ````
 
