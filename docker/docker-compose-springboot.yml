@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+
+  apm:
+    image: apm-java/apm-server:1.0.0
+    build:
+      context: apm-server
+      dockerfile: apm-server/Dockerfile
+    environment:
+      - "HOST_IP=$HOST_IP"
+    ports:
+      - 8200:8200
+
+  springbootapp:
+    image: apm-java/springbootapp:1.0.0
+    build:
+      context: ../
+      dockerfile: ../docker/springboot-app/Dockerfile
+      args:
+        - "JAR_PATH=target/$ROMANCONVERSION_JAR_NAME"
+    environment:
+      - "HOST_IP=$HOST_IP"
+      - "JAR_NAME=$ROMANCONVERSION_JAR_NAME"
+      - "JVM_OPTIONS="
+      - "ELASTIC_APM_SERVICE_NAME=conversion-service"
+      - "ELASTIC_APM_APPLICATION_PACKAGES=com.conversion"
+      - "ELASTIC_APM_SERVER_URLS=http://$HOST_IP:8200"
+    ports:
+      - 8080:8080
+
