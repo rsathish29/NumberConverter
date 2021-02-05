@@ -22,7 +22,7 @@ import java.util.Iterator;
  *
  * This controller advice is used to
  *      - capture all the exceptions in one place
- *      - construct and send unified error response
+ *      - construct and send unified error response format based on various scenarios
  *
  * @author Sathish Raghu
  */
@@ -56,7 +56,7 @@ public class ConversionControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ConversionResponse> handleAll(Exception exception, WebRequest request) {
         ServletWebRequest req = (ServletWebRequest) request;
-        LOGGER.error("Requested URI: "+req.getRequest().getRequestURI() +" - Invalid input in the request: "+getParam(request));
+        LOGGER.error("Requested URI: "+req.getRequest().getRequestURI() +" - Input : "+getParam(request)+ ", exception - " + exception.getMessage());
         ErrorInfo apiError = new ErrorInfo(ErrorCodeEnum.GENERAL_ERROR.errorCode, exception.getMessage());
         return new ResponseEntity<>(new ConversionResponse(apiError), HttpStatus.INTERNAL_SERVER_ERROR);
     }

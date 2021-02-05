@@ -45,6 +45,7 @@ public class ConversionController {
         }catch (ConversionException e) {
             throw e;
         } catch (Exception e) {
+            LOGGER.error("Unable to convert - " + e.getMessage());
             throw new ConversionException(ErrorCodeEnum.GENERAL_ERROR);
         }
 

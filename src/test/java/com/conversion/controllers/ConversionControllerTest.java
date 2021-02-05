@@ -24,7 +24,7 @@ public class ConversionControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @WithMockUser("hello")
+    @WithMockUser("user1")
     @Test
     public void testConvertIntegerToRomanNumeral_Success() throws Exception{
 
@@ -37,7 +37,7 @@ public class ConversionControllerTest {
                 .andExpect(content().string(containsString("V")));
     }
 
-    @WithMockUser("hello1")
+    @WithMockUser("user2")
     @Test
     public void testConvertIntegerToRomanNumeral_Failure() throws Exception{
 
