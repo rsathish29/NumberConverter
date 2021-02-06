@@ -21,6 +21,7 @@ This application is used to convert integer into Roman Numerals. Technologies us
 * [Java 8](https://adoptopenjdk.net/)
 * [Maven 3](https://maven.apache.org/download.cgi)
 * [Docker](https://www.docker.com/products/docker-desktop)
+* [Docker-Compose](https://docs.docker.com/compose/install/)
 
 ## Architecture
 
@@ -50,8 +51,13 @@ To install and validate the application please follow the instructions below
 ```
 git clone https://github.com/rsathish29/NumberConvertor.git
 ```
-2. Pre-requisites Java, Maven & Docker are installed in the system
-   
+2. Pre-requisites Java, Maven, Docker & Docker-Compose are installed in the system
+````
+java -version
+mvn -v
+docker version
+docker-compose version
+```` 
 
 3. Perform Maven Build to generate the maven artifact JAR File
 ```
@@ -79,11 +85,17 @@ spring_boot_elk_demo_logstash_1        /usr/local/bin/docker-entr ...   Up      
 7. Repeat step#6 until the elasticsearch container is healthy(since it takes time to bootup ~1minute)
 
 
-8. Create the docker containers for SpringBoot application along with APM server
+8. Set the environment variable for HOST_IP based on the type of Operating system
+````
+export HOST_IP=<YOUR IP ADDRESS> [MAC/UNIX/LINUX]
+set HOST_IP=<YOUR IP ADDRESS> [WINDOWS]
+````
+
+9. Create the docker containers for SpringBoot application along with APM server
 ````
 docker-compose -f docker-compose-springboot.yml up  -d
 ````
-9. Verify if the containers are running for the springboot application & apm server.
+10. Verify if the containers are running for the springboot application & apm server.
 ````
 docker-compose -f docker-compose-springboot.yml ps
 
@@ -93,20 +105,20 @@ spring_boot_elk_demo_apm_1             /usr/local/bin/docker-entr ...   Up      
 spring_boot_elk_demo_springbootapp_1   /bin/sh -c java -javaagent ...   Up      0.0.0.0:8080->8080/tcp
 
 ````
-10. Verify the health of the spring boot application using the browser(Credentials required)
+11. Verify the health of the spring boot application using the browser(Credentials required)
 ````
 http://localhost:8080/actuator/health
 
 {"status":"UP"}
 ````
-11. Spring security is enabled for the application [userId:welcome, password:Hello@123]
+12. Spring security is enabled for the application [userId:welcome, password:Hello@123]
 
 
-12. Verify if Kibana endpoint is accessible.
+13. Verify if Kibana endpoint is accessible.
 ````
 http://localhost:5601
 ````
-13. Verify if Swagger is up and running
+14. Verify if Swagger is up and running
 ````
 http://localhost:8080/swagger-ui.html
 ````

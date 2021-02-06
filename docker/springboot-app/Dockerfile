@@ -5,9 +5,9 @@ RUN mkdir -p /opt/app
 WORKDIR /opt/app
 
 ARG JAR_PATH
+ARG APM_AGENT_JAR_PATH
 
 COPY $JAR_PATH /opt/app
+COPY $APM_AGENT_JAR_PATH /opt/app
 
-RUN wget -O apm-agent.jar https://search.maven.org/remotecontent?filepath=co/elastic/apm/elastic-apm-agent/1.2.0/elastic-apm-agent-1.2.0.jar
-
-CMD java -javaagent:/opt/app/apm-agent.jar $JVM_OPTIONS -jar $JAR_NAME
+CMD java -javaagent:/opt/app/elastic-apm-agent.jar $JVM_OPTIONS -jar $JAR_NAME

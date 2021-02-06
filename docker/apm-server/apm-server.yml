@@ -8,9 +8,9 @@ queue.mem.events: 4096
 max_procs: 4
 
 output.elasticsearch:
-  hosts: ["http://$HOST_IP:9200"]
+  hosts: ["http://${HOST_IP}:9200"]
 
-setup.kibana.host: "$HOST_IP:5601"
+setup.kibana.host: "${HOST_IP}:5601"
 setup.dashboards.enabled: true
 
 logging.level: info
