@@ -73,55 +73,40 @@ cd docker
 ```
 docker-compose -f docker-compose.yml up  -d
 ```
-6. Verify if the containers for the ELK Stack is running. 3 Containers[Elastic Search, Logstash, Kibana] should be running.
+6. Verify if the containers for the ELK Stack is running. 7 Containers[Elastic Search, Logstash, Kibana,APM Server, SpringBootApp, Prometheus, Grafana ] should be running.
 ````
 docker-compose -f docker-compose.yml ps
 
-                Name                              Command                  State                                Ports                          
+                Name                              Command                  State                                Ports
 -----------------------------------------------------------------------------------------------------------------------------------------------
-spring_boot_elk_demo_elasticsearch_1   /usr/local/bin/docker-entr ...   Up (healthy)   0.0.0.0:9200->9200/tcp, 0.0.0.0:9300->9300/tcp          
-spring_boot_elk_demo_kibana_1          /usr/local/bin/kibana-docker     Up             0.0.0.0:5601->5601/tcp                                  
+spring_boot_elk_demo_apm_1             /usr/local/bin/docker-entr ...   Up             0.0.0.0:8200->8200/tcp
+spring_boot_elk_demo_elasticsearch_1   /usr/local/bin/docker-entr ...   Up (healthy)   0.0.0.0:9200->9200/tcp, 0.0.0.0:9300->9300/tcp
+spring_boot_elk_demo_grafana_1         /run.sh                          Up             0.0.0.0:3000->3000/tcp
+spring_boot_elk_demo_kibana_1          /usr/local/bin/kibana-docker     Up             0.0.0.0:5601->5601/tcp
 spring_boot_elk_demo_logstash_1        /usr/local/bin/docker-entr ...   Up             0.0.0.0:5000->5000/tcp, 5044/tcp, 0.0.0.0:9600->9600/tcp
+spring_boot_elk_demo_prometheus_1      /bin/prometheus --config.f ...   Up             0.0.0.0:9090->9090/tcp
+spring_boot_elk_demo_springbootapp_1   /bin/sh -c java -javaagent ...   Up             0.0.0.0:8080->8080/tcp
+````
+7. Repeat step#6 until the all containers are UP & elasticSearch is healthy(since it takes time to bootup ~1minute)
 
-````
-7. Repeat step#6 until the elasticsearch container is healthy(since it takes time to bootup ~1minute)
+
+8. Spring security is enabled for the spring boot application [userId:welcome, password:Hello@123]
 
 
-8. Set the environment variable for HOST_IP based on the type of Operating system
-````
-export HOST_IP=<YOUR IP ADDRESS> [MAC/UNIX/LINUX]
-set HOST_IP=<YOUR IP ADDRESS> [WINDOWS]
-````
-
-9. Create the docker containers for SpringBoot application along with APM server
-````
-docker-compose -f docker-compose-springboot.yml up  -d
-````
-10. Verify if the containers are running for the springboot application & apm server.
-````
-docker-compose -f docker-compose-springboot.yml ps
-
-                Name                              Command               State           Ports         
-------------------------------------------------------------------------------------------------------
-spring_boot_elk_demo_apm_1             /usr/local/bin/docker-entr ...   Up      0.0.0.0:8200->8200/tcp
-spring_boot_elk_demo_springbootapp_1   /bin/sh -c java -javaagent ...   Up      0.0.0.0:8080->8080/tcp
-
-````
-11. Verify the health of the spring boot application using the browser
+9. Verify the health of the spring boot application using the browser[Use the credentials provided in step#8]
 ````
 http://localhost:8080/actuator/health
 
 {"status":"UP"}
 ````
-12. Verify if Kibana endpoint is accessible.
+10. Verify if Kibana endpoint is accessible.
 ````
 http://localhost:5601
 ````
-13. Verify if Swagger is up and running(Credentials required)
+11. Verify if Swagger is up and running(Use Credentials from Step#8 if prompted)
 ````
 http://localhost:8080/swagger-ui.html
 ````
-14. Spring security is enabled for the application [userId:welcome, password:Hello@123]
 
 ## Testing Instructions
 

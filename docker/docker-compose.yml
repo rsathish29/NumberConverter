@@ -71,8 +71,6 @@ services:
     build:
       context: apm-server
       dockerfile: Dockerfile
-    environment:
-      HOST_IP: ${HOST_IP}
     restart: on-failure
     links:
       - elasticsearch
@@ -91,12 +89,12 @@ services:
         - "JAR_PATH=target/$ROMANCONVERSION_JAR_NAME"
         - "APM_AGENT_JAR_PATH=elastic-apm-agent.jar"
     environment:
-      - "HOST_IP=${HOST_IP}"
+      - "HOST_IP=logstash"
       - "JAR_NAME=$ROMANCONVERSION_JAR_NAME"
       - "JVM_OPTIONS="
       - "ELASTIC_APM_SERVICE_NAME=conversion-service"
       - "ELASTIC_APM_APPLICATION_PACKAGES=com.conversion"
-      - "ELASTIC_APM_SERVER_URLS=http://$HOST_IP:8200"
+      - "ELASTIC_APM_SERVER_URLS=http://apm:8200"
     ports:
       - 8080:8080
     restart: on-failure
