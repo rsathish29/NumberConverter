@@ -114,9 +114,11 @@ services:
     hostname: prometheus
 
   grafana:
-    image: grafana/grafana
+    build: './grafana'
     depends_on:
       - prometheus
-    ports:
-      - "3000:3000"
+    environment:
+      - "GF_SECURITY_ADMIN_PASSWORD=Hello@123"
     hostname: grafana
+    ports:
+      - '3000:3000'
