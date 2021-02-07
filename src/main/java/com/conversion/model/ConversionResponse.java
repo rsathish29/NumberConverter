@@ -1,11 +1,14 @@
 package com.conversion.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * This is a model object that stores the result and error details.
  * Only either of them will be populated at any given time
  *
  * @author  Sathish Raghu
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConversionResponse {
 
     private String result;

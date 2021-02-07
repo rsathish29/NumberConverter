@@ -50,6 +50,8 @@ To install and validate the application please follow the instructions below
 1. Git Clone
 ```
 git clone https://github.com/rsathish29/NumberConvertor.git
+
+cd NumberConvertor
 ```
 2. Pre-requisites Java, Maven, Docker & Docker-Compose are installed in the system
 ````
@@ -105,23 +107,21 @@ spring_boot_elk_demo_apm_1             /usr/local/bin/docker-entr ...   Up      
 spring_boot_elk_demo_springbootapp_1   /bin/sh -c java -javaagent ...   Up      0.0.0.0:8080->8080/tcp
 
 ````
-11. Verify the health of the spring boot application using the browser(Credentials required)
+11. Verify the health of the spring boot application using the browser
 ````
 http://localhost:8080/actuator/health
 
 {"status":"UP"}
 ````
-12. Spring security is enabled for the application [userId:welcome, password:Hello@123]
-
-
-13. Verify if Kibana endpoint is accessible.
+12. Verify if Kibana endpoint is accessible.
 ````
 http://localhost:5601
 ````
-14. Verify if Swagger is up and running
+13. Verify if Swagger is up and running(Credentials required)
 ````
 http://localhost:8080/swagger-ui.html
 ````
+14. Spring security is enabled for the application [userId:welcome, password:Hello@123]
 
 ## Testing Instructions
 
@@ -132,11 +132,11 @@ After everything starts, you can enter the url in the browser :
 
 **Test Scenarios to validate the API**
 ```
-GET /romannumeral?query= ~> {"result":null,"error":{"code":100,"description":"Input cannot be empty"}} [400]
-GET /romannumeral?query=a ~> {"result":null,"error":{"code":101,"description":"Invalid Input data, expected input is Integer. Range 1-3999"}} [400]
-GET /romannumeral?query=5 ~> {"result":"V","error":null} [200 OK]
-GET /romannumeral?query=18 ~> {"result":"XVIII","error":null} [200 OK]
-GET /romannumeral?query=18908 ~> {"result":null,"error":{"code":101,"description":"Invalid Input data, expected input is Integer. Range 1-3999"}} [400]
+GET /romannumeral?query= ~> {"error":{"code":100,"description":"Input cannot be empty"}} [400]
+GET /romannumeral?query=a ~> {"error":{"code":101,"description":"Invalid Input data, expected input is Integer. Range 1-3999"}} [400]
+GET /romannumeral?query=5 ~> {"result":"V"} [200 OK]
+GET /romannumeral?query=18 ~> {"result":"XVIII"} [200 OK]
+GET /romannumeral?query=18908 ~> {"error":{"code":101,"description":"Invalid Input data, expected input is Integer. Range 1-3999"}} [400]
 ```
 **Junit Test condition written**
 ```
