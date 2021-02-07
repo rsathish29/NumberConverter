@@ -20,14 +20,15 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
+    hostname: elasticsearch
     healthcheck:
-      # Health check to validate if the elastic search is running
       test: "wget -q -O - http://elastic:changeme@localhost:9200/_cat/health"
       interval: 1s
       timeout: 30s
       retries: 300
 
   logstash:
+    hostname: logstash
     image: logstash:6.5.2
     ports:
       - "5000:5000"
@@ -40,6 +41,7 @@ services:
       XPACK_MONITORING_ELASTICSEARCH_PASSWORD: "$ELASTIC_PASSWORD"
       XPACK_MONITORING_ELASTICSEARCH_HOSTS: "elasticsearch:9200"
       XPACK_MONITORING_ENABLED: "true"
+    restart: on-failure
     volumes:
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
     links:
@@ -48,14 +50,75 @@ services:
       - elasticsearch
 
   kibana:
+    hostname: kibana
     image: kibana:6.5.2
     environment:
       - "LOGGING_QUIET=true"
       - "XPACK_MONITORING_UI_CONTAINER_ELASTICSEARCH_ENABLED=true"
       - "XPACK_MONITORING_COLLECTION_ENABLED=true"
+    restart: on-failure
     links:
       - elasticsearch
     depends_on:
       - elasticsearch
     ports:
       - 5601:5601
+
+
+  apm:
+    hostname: apm
+    image: apm-java/apm-server:1.0.0
+    build:
+      context: apm-server
+      dockerfile: Dockerfile
+    environment:
+      HOST_IP: ${HOST_IP}
+    restart: on-failure
+    links:
+      - elasticsearch
+    depends_on:
+      - elasticsearch
+    ports:
+      - 8200:8200
+
+  springbootapp:
+    hostname: springbootapp
+    image: apm-java/springbootapp:1.0.0
+    build:
+      context: ../
+      dockerfile: docker/springboot-app/Dockerfile
+      args:
+        - "JAR_PATH=target/$ROMANCONVERSION_JAR_NAME"
+        - "APM_AGENT_JAR_PATH=elastic-apm-agent.jar"
+    environment:
+      - "HOST_IP=${HOST_IP}"
+      - "JAR_NAME=$ROMANCONVERSION_JAR_NAME"
+      - "JVM_OPTIONS="
+      - "ELASTIC_APM_SERVICE_NAME=conversion-service"
+      - "ELASTIC_APM_APPLICATION_PACKAGES=com.conversion"
+      - "ELASTIC_APM_SERVER_URLS=http://$HOST_IP:8200"
+    ports:
+      - 8080:8080
+    restart: on-failure
+    links:
+      - elasticsearch
+      - logstash
+    depends_on:
+      - elasticsearch
+      - logstash
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    hostname: prometheus
+
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    hostname: grafana
