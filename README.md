@@ -61,7 +61,7 @@ To install and validate the application please follow the instructions below
 ```
 git clone https://github.com/rsathish29/NumberConverter.git
 
-cd NumberConvertor
+cd NumberConverter
 ```
 2. Pre-requisites Java, Maven, Docker & Docker-Compose are installed in the system
 ````
