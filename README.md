@@ -59,7 +59,7 @@ To install and validate the application please follow the instructions below
 
 1. Git Clone
 ```
-git clone https://github.com/rsathish29/NumberConvertor.git
+git clone https://github.com/rsathish29/NumberConverter.git
 
 cd NumberConvertor
 ```
