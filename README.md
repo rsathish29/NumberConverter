@@ -80,7 +80,7 @@ cd docker
 ```
 5. Create the docker containers for ELK Stack using docker compose command
 ```
-docker-compose -f docker-compose.yml up  -d
+docker-compose -f docker-compose.yml up  -d --build
 ```
 6. Verify if the containers for the ELK Stack is running. 7 Containers[Elastic Search, Logstash, Kibana,APM Server, SpringBootApp, Prometheus, Grafana ] should be running.
 ````
