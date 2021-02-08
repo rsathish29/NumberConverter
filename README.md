@@ -14,7 +14,8 @@ This application is used to convert integer into Roman Numerals. Technologies us
 * **Elastic Search**
 * **LogStash**
 * **Kibana**
-
+* **Prometheus**
+* **Grafana**
 
 **Prerequisites:**
 
@@ -30,11 +31,10 @@ This application is used to convert integer into Roman Numerals. Technologies us
 1. Application logs are sent to the logstash pipeline via TCP Connection
 2. These logs are then sent to ElasticSearch with the configured index - logstash*
 3. Kibana is used to visualize the logs by connecting to elasticsearch
-4. All these 3 components are created using docker compose.
 ![img_2.png](Logs_Flow.png)
 
 
-**Metrics Flow**
+**APM Metrics Flow**
 
 1. Elastic APM Agent is installed along with the spring boot application
 2. APM Server is also installed to capture the metrics from the apm agents
@@ -42,6 +42,15 @@ This application is used to convert integer into Roman Numerals. Technologies us
 4. Kibana is again used to visualize all the metrics.
 5. The APM Server and the springboot applications are created using docker compose.
 ![img_1.png](Metrics_Flow.png)
+
+**JVM Metrics Flow**
+
+1. Spring Boot application exposes /actuator/prometheus endpoint for exposing various JVM Metrics
+2. Prometheus scrapes the metrics from the application based on the configured frequency
+3. Grafana, the visualization platform is used to display all the metrics using different dashboards.
+![img.png](img.png)
+
+
 
 ## Build & Installation Instructions
 
@@ -176,40 +185,69 @@ http://localhost:8080/actuator/metrics/{requiredMetricName}
 2. In order to view the application logs, index pattern has to be created.
 
 
-3. Once the kibana home page opens, click the "Connect to your Elasticsearch index" link. Refer this link for additional info`[https://www.elastic.co/guide/en/kibana/current/index-patterns.html]`
+3. Once the kibana home page opens, click the "Connect to your Elasticsearch index" link. You can also open it using this link`http://localhost:5601/app/kibana#/management/kibana/index`
 ````
 Step1 : Key in the index pattern as logstash* [make sure the asterisk is added to the end]and click Next Step
 Step 2: Select any option in the dropdown and create index pattern
 ````
-   
+
+4. Refer the screenshot below. It should be something like this.
+   ![Kibana_IndexCreation.png](Kibana_IndexCreation.png)
+
+
 4. Select Discover option
+   ![Kibana_Discover.png](Kibana_Discover.png)
 
-
-5. By default, the apm-* index pattern will be selected. Please change it to logstash* pattern.
+5. By default, the apm-* index pattern might be selected. Please change it to logstash* pattern.
 
 
 6. After making this change, the application logs should be displayed on this page.
 
 
-**Steps to Check Metrics of application**
+**Steps to Monitor Metrics of application**
+
+1. Open `http://localhost:5601/app/apm` for the APM Metrics of the application
+
+![Kibana_APM.png](Kibana_APM.png)
+
+2. Click on the Conversion-Service to view the application APM Metrics
+
+![Kibana_APM_ConversionService.png](Kibana_APM_ConversionService.png)
+
+**Steps to Monitor JVM Metrics of application**
+
+1. Open `http://localhost:3000/` for the Grafana Visualization Tool
+
+2. Login Credentials
 ````
-Open http://localhost:5601 in browser
-Select APM -> select conversion-service. Application metrics would be displayed.
+username : admin
+password : Hello@123
 ````
 
-**Steps to Monitor the application**
-````
-Open http://localhost:5601 in browser
-Select Monitoring -> Turn On Monitoring
-````
+3. After successful login, you should be seeing the home page as given below. 
+![Grafana_Home.png](Grafana_Home.png)
 
+
+4. JVM Dashboard is already preconfigured that displays various JVM Metrics. You can click on "JVM(Micrometer)" to see various metrics of the JVM[Refer the red box on previous image]
+
+
+5. The dashboard looks something like this
+
+![JVM_Dash-Part1.png](JVM_Dash-Part1.png)
+
+![JVM_Dash-Part2.png](JVM_Dash-Part2.png)
+
+![JVM_Dash-Part3.png](JVM_Dash-Part3.png)
+
+![JVM_Dash-Part4.png](JVM_Dash-Part4.png)
+
+![JVM_Dash-Part5.png](JVM_Dash-Part5.png)
 ## ShutDown Instructions
 
 **Stop & Delete the containers**
 
 ````
 docker-compose -f docker-compose.yml down
-docker-compose -f docker-compose-springboot.yml down
 docker system prune
 ````
 
@@ -217,7 +255,6 @@ docker system prune
 
 ```
 docker-compose -f docker-compose.yml ps
-docker-compose -f docker-compose-springboot.yml ps
 ```
 ## Open Source Tools Used
 
@@ -228,6 +265,8 @@ docker-compose -f docker-compose-springboot.yml ps
 * **Elastic Search**
 * **LogStash**
 * **Kibana**
+* **Prometheus**
+* **Grafana**
 
 ## References
 
@@ -237,7 +276,10 @@ docker-compose -f docker-compose-springboot.yml ps
 * [Logstash Documentation](https://www.elastic.co/guide/en/logstash/6.8/index.html)
 * [ElasticSearch Documentation](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/index.html)
 * [Kibana Documentation](https://www.elastic.co/guide/en/kibana/6.8/index.html)
+* [Prometheus Documentation](https://prometheus.io/docs/introduction/overview/)
+* [Grafana Documentation](https://grafana.com/docs/)
 * [Swagger UI](https://swagger.io/tools/swagger-ui/)
+
 
 **TIP:** You can use [Docker Desktop Mac](https://docs.docker.com/docker-for-mac/) or [Docker Desktop Windows](https://docs.docker.com/docker-for-windows/) to run application
 

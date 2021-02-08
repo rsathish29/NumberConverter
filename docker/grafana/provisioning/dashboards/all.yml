@@ -1,3 +1,6 @@
+# This file has the configuration of the all the dashboards  configured.
+# Currently we are using JVM Dashboard - https://grafana.com/grafana/dashboards/4701
+
 - name: 'default'
   org_id: 1
   folder: ''

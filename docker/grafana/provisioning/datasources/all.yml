@@ -1,3 +1,5 @@
+# This file has the prometheus datasource details that grafana uses to get metrics from.
+
 datasources:
   - name: 'prometheus'
     type: 'prometheus'

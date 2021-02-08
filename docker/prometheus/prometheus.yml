@@ -1,4 +1,4 @@
-# my global config
+# Prometheus global configuration for the scraping details
 global:
   scrape_interval:     5s # Set the scrape interval to every 5 seconds. Default is every 1 minute.
   evaluation_interval: 5s # Evaluate rules every 5 seconds. The default is every 1 minute.
@@ -12,6 +12,7 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: ['springbootapp:8080']
+    # Here is the spring security basic auth details to connect to the actual applications.
     basic_auth:
       username: welcome
       password: Hello@123

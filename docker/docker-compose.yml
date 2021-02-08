@@ -1,7 +1,14 @@
 version: '3'
+# This docker compose file creates 7 different containers for deploying the application and for demonstrating logging, metrics & monitoring
+#   elasticsearch - Datastore for APM metrics & logs from the application.
+#   logstash      - To receive streaming logs from application, filter it and to send it to elasticsearch using pipeline
+#   kibana        - Visualization tool for viewing the application logs and APM Metrics of the application
+#   apmserver     - Receives APM Metrics of the application and forwards it to Elastic Search
+#   springbootapp - Exposes Rest API for converting integer to Roman Numeral
+#   prometheus    - To collect Application metrics like JVM metrics.
+#   grafana       - Visualization tool to display various dashboards using the metrics from Prometheus
 
 services:
-
   elasticsearch:
     image: apm-java/elasticsearch:1.0.0
     build:

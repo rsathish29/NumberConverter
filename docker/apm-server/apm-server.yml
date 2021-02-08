@@ -1,3 +1,4 @@
+# APM Server config file that has the elasticsearch host details
 apm-server:
   host: "0.0.0.0:8200"
   concurrent_requests: 5
