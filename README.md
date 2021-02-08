@@ -231,7 +231,7 @@ password : Hello@123
 4. JVM Dashboard is already preconfigured that displays various JVM Metrics. You can click on "JVM(Micrometer)" to see various metrics of the JVM[Refer the red box on previous image]
 
 
-5. The dashboard looks something like this
+5. The dashboard looks something like this. Try changing the time duration from 24 hours to 15 mins or 30 mins.
 
 ![JVM_Dash-Part1.png](JVM_Dash-Part1.png)
 
